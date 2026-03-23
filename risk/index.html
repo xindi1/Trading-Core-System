@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Trade Risk &amp; Target Calculator</title>
+  <meta name="theme-color" content="#020617" />
+  <meta name="description" content="Determines position size, risk exposure, and reward potential for a trade." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="frame">
+      <header class="app-header">
+        <div class="brand-block">
+          <p class="eyebrow">Trading Core System</p>
+          <h1>Trade Risk &amp; Target Calculator</h1>
+          <p class="subtitle">Determines position size, risk exposure, and reward potential for a trade.</p>
+        </div>
+
+        <div class="header-tools">
+          <nav class="top-nav" aria-label="Trading Core System modules">
+            <a href="#" class="top-nav-link is-disabled" aria-disabled="true">Qualification</a>
+            <a href="#" class="top-nav-link is-active" aria-current="page">Risk</a>
+            <a href="#" class="top-nav-link is-disabled" aria-disabled="true">Journal</a>
+          </nav>
+
+          <div class="theme-toggle" id="themeToggle" aria-label="Theme toggle">
+            <span>Theme</span>
+            <button type="button" data-theme="blue" class="active">Blue</button>
+            <button type="button" data-theme="light">Light</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-grid">
+        <section class="left-column">
+          <section class="card section-card">
+            <div class="section-head">
+              <p class="section-kicker">Inputs</p>
+              <h2>Risk Plan</h2>
+              <p class="helper">Define the trade parameters that drive position size, max risk, and reward profile.</p>
+            </div>
+
+            <div class="input-grid">
+              <label class="field">
+                <span>Account Size</span>
+                <input id="account" type="number" inputmode="decimal" placeholder="1000" />
+              </label>
+
+              <label class="field">
+                <span>Risk %</span>
+                <input id="riskPercent" type="number" inputmode="decimal" placeholder="5" />
+              </label>
+
+              <label class="field">
+                <span>Entry Price</span>
+                <input id="entry" type="number" inputmode="decimal" placeholder="2.50" />
+              </label>
+
+              <label class="field">
+                <span>Stop Price</span>
+                <input id="stop" type="number" inputmode="decimal" placeholder="2.30" />
+              </label>
+
+              <label class="field field-full">
+                <span>Target Price</span>
+                <input id="target" type="number" inputmode="decimal" placeholder="2.90" />
+              </label>
+            </div>
+
+            <div class="helper helper-compact">Output updates automatically as you type. This tool remains execution-focused and intentionally lightweight.</div>
+          </section>
+        </section>
+
+        <section class="right-column">
+          <section class="card section-card decision-section">
+            <div class="section-head">
+              <p class="section-kicker">Decision</p>
+              <h2>Trade Decision</h2>
+              <p class="helper">Immediate read on whether reward potential justifies the defined risk.</p>
+            </div>
+
+            <div class="decision-card">
+              <div id="decisionBox" class="decision decision-neutral">—</div>
+              <div id="decisionSubtext" class="decision-subtext">Enter values to generate a decision.</div>
+            </div>
+          </section>
+
+          <section class="card section-card">
+            <div class="section-head">
+              <p class="section-kicker">Primary Outputs</p>
+              <h2>Key Metrics</h2>
+              <p class="helper">Core execution numbers first. Secondary percentages below.</p>
+            </div>
+
+            <div class="metrics-grid">
+              <article class="metric-card metric-card-hero">
+                <span class="metric-label">R Multiple</span>
+                <strong id="rMultiple" class="metric-value">—</strong>
+              </article>
+
+              <article class="metric-card metric-card-hero">
+                <span class="metric-label">Shares</span>
+                <strong id="shares" class="metric-value">—</strong>
+              </article>
+
+              <article class="metric-card metric-card-hero">
+                <span class="metric-label">Max Risk</span>
+                <strong id="maxRisk" class="metric-value">—</strong>
+              </article>
+
+              <article class="metric-card metric-card-hero">
+                <span class="metric-label">Projected Profit</span>
+                <strong id="profit" class="metric-value">—</strong>
+              </article>
+            </div>
+
+            <div class="secondary-grid">
+              <article class="secondary-card">
+                <span class="secondary-label">Stop %</span>
+                <strong id="stopPct" class="secondary-value">—</strong>
+              </article>
+
+              <article class="secondary-card">
+                <span class="secondary-label">Target %</span>
+                <strong id="targetPct" class="secondary-value">—</strong>
+              </article>
+            </div>
+          </section>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-pill">Trading Core System • Risk Calculator</div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

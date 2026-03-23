@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Trade Execution Journal</title>
+  <meta name="theme-color" content="#020617" />
+  <meta name="description" content="Captures the execution decision, outcome, and review context for qualified trade setups." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <div class="frame">
+      <header class="app-header">
+        <div class="brand-block">
+          <p class="eyebrow">Trading Core System</p>
+          <h1>Trade Execution Journal</h1>
+          <p class="subtitle">Captures the execution decision, outcome, and review context for qualified trade setups.</p>
+        </div>
+
+        <div class="header-tools">
+          <nav class="top-nav" aria-label="Trading Core System modules">
+            <a href="#" class="top-nav-link is-disabled" aria-disabled="true">Qualification</a>
+            <a href="#" class="top-nav-link is-disabled" aria-disabled="true">Risk</a>
+            <a href="#" class="top-nav-link is-active" aria-current="page">Journal</a>
+          </nav>
+
+          <div class="theme-toggle" id="themeToggle" aria-label="Theme toggle">
+            <span>Theme</span>
+            <button type="button" data-theme="blue" class="active">Blue</button>
+            <button type="button" data-theme="light">Light</button>
+          </div>
+        </div>
+      </header>
+
+      <nav class="action-bar" aria-label="Journal actions">
+        <div class="action-group action-group-primary">
+          <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+        </div>
+        <div class="action-group">
+          <button type="button" class="btn" id="btnNew">New</button>
+          <button type="button" class="btn" id="btnHistory">History</button>
+          <button type="button" class="btn" id="btnCopy">Copy</button>
+          <button type="button" class="btn" id="btnExportCSV">Export CSV</button>
+          <button type="button" class="btn" id="btnExportJSON">Export JSON</button>
+        </div>
+        <div class="action-group action-group-danger">
+          <button type="button" class="btn btn-danger" id="btnDelete">Delete</button>
+          <button type="button" class="btn btn-danger" id="btnClearAll">Clear All</button>
+          <button type="button" class="btn btn-danger" id="btnResetCounter">Reset #</button>
+        </div>
+      </nav>
+
+      <main class="main-grid">
+        <section class="left-column">
+          <section class="card section-card">
+            <div class="section-head">
+              <p class="section-kicker">Execution Entry</p>
+              <h2>Decision Context</h2>
+              <p class="helper">Record the decision, timing, and setup context for a single qualified trade opportunity.</p>
+            </div>
+
+            <div class="identity-grid">
+              <label class="field field-compact">
+                <span>Decision #</span>
+                <div class="field-inline">
+                  <input id="decisionNo" class="mono" type="text" inputmode="numeric" placeholder="0001" />
+                  <label class="lock-pill" title="Lock decision number">
+                    <input id="lockDecision" type="checkbox" />
+                    <span>Lock #</span>
+                  </label>
+                </div>
+              </label>
+
+              <label class="field field-compact">
+                <span>Date</span>
+                <input id="date" type="date" />
+              </label>
+
+              <label class="field field-compact">
+                <span>Ticker</span>
+                <input id="ticker" class="mono" type="text" maxlength="10" autocomplete="off" placeholder="ABCD" />
+              </label>
+            </div>
+
+            <div class="input-grid input-grid-4">
+              <label class="field">
+                <span>Qualification Decision</span>
+                <select id="qualificationDecision">
+                  <option value="">Select…</option>
+                  <option>Qualified</option>
+                  <option>Borderline</option>
+                  <option>Rejected</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Qualification Score</span>
+                <input id="qualificationScore" type="text" class="mono" placeholder="e.g. 7.5 / 10" />
+              </label>
+
+              <label class="field">
+                <span>Planned Session</span>
+                <select id="plannedSession">
+                  <option value="">Select…</option>
+                  <option>Premarket</option>
+                  <option>Open (9:30–10:30)</option>
+                  <option>Midday</option>
+                  <option>Power Hour</option>
+                  <option>After Hours</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Risk Plan Reference</span>
+                <input id="riskPlanReference" type="text" placeholder="R:R plan / setup ref" />
+              </label>
+            </div>
+
+            <div class="input-grid input-grid-3">
+              <label class="field">
+                <span>Execution Session</span>
+                <select id="session">
+                  <option>Premarket</option>
+                  <option>Open (9:30–10:30)</option>
+                  <option>Midday</option>
+                  <option>Power Hour</option>
+                  <option>After Hours</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Catalyst Type</span>
+                <select id="catalyst">
+                  <option>Clinical Data</option>
+                  <option>Regulatory</option>
+                  <option>Financial</option>
+                  <option>M&amp;A</option>
+                  <option>Operational Update</option>
+                  <option>Corporate Strategy / Business Transformation</option>
+                  <option>Leadership Change</option>
+                  <option>Legal</option>
+                  <option>IP/Patent</option>
+                  <option>Other / None</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Market Context</span>
+                <select id="marketState">
+                  <option>Unclear</option>
+                  <option>Trend Day</option>
+                  <option>Choppy</option>
+                  <option>Risk-On</option>
+                  <option>Risk-Off</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="field field-full">
+              <div class="field-headline">
+                <span>Pre-Trade Thesis</span>
+                <span class="char-counter" id="charCounter">0 / 240</span>
+              </div>
+              <textarea id="thesis" maxlength="240" placeholder="What was the setup, why was it interesting, and why now?"></textarea>
+            </div>
+          </section>
+
+          <section class="card section-card">
+            <div class="section-head">
+              <p class="section-kicker">Outcome</p>
+              <h2>Execution Status</h2>
+              <p class="helper">Outcome is required before save. This is the core judgment marker for the decision record.</p>
+            </div>
+
+            <div class="outcome-grid" id="outcomeRow">
+              <label class="outcome-card outcome-taken" data-val="Taken">
+                <input type="radio" name="outcome" value="Taken" />
+                <span class="outcome-label">Taken</span>
+                <span class="outcome-sub">Trade executed</span>
+              </label>
+              <label class="outcome-card outcome-passed" data-val="Passed">
+                <input type="radio" name="outcome" value="Passed" />
+                <span class="outcome-label">Passed</span>
+                <span class="outcome-sub">Qualified but not acted on</span>
+              </label>
+              <label class="outcome-card outcome-invalidated" data-val="Invalidated">
+                <input type="radio" name="outcome" value="Invalidated" />
+                <span class="outcome-label">Invalidated</span>
+                <span class="outcome-sub">Setup broke before execution</span>
+              </label>
+            </div>
+
+            <label class="field field-full">
+              <span>Review Notes</span>
+              <textarea id="outcomeNotes" class="notes" placeholder="Short execution review. Unlocked after save or when loading a saved decision."></textarea>
+            </label>
+          </section>
+
+          <section class="card section-card">
+            <div class="section-head">
+              <p class="section-kicker">Review Snapshot</p>
+              <h2>Decision Quality</h2>
+              <p class="helper">Fast-select review layer focused on judgment quality, not emotional journaling.</p>
+            </div>
+
+            <div class="review-grid">
+              <label class="field">
+                <span>Followed Plan?</span>
+                <select id="followedPlan">
+                  <option value="">Select…</option>
+                  <option>Yes</option>
+                  <option>No</option>
+                  <option>Partial</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Was Pass Correct?</span>
+                <select id="passCorrect">
+                  <option value="">Select…</option>
+                  <option>Yes</option>
+                  <option>No</option>
+                  <option>N/A</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Was Invalidation Valid?</span>
+                <select id="invalidationValid">
+                  <option value="">Select…</option>
+                  <option>Yes</option>
+                  <option>No</option>
+                  <option>N/A</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Timing Quality</span>
+                <select id="timingQuality">
+                  <option value="">Select…</option>
+                  <option>Good</option>
+                  <option>Late</option>
+                  <option>Early</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Emotion Interference</span>
+                <select id="emotionInterference">
+                  <option value="">Select…</option>
+                  <option>None</option>
+                  <option>Mild</option>
+                  <option>High</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Take This Again?</span>
+                <select id="takeAgain">
+                  <option value="">Select…</option>
+                  <option>Yes</option>
+                  <option>No</option>
+                  <option>Maybe</option>
+                </select>
+              </label>
+            </div>
+          </section>
+        </section>
+
+        <section class="right-column">
+          <section class="card section-card timer-section">
+            <div class="section-head">
+              <p class="section-kicker">Execution Clock</p>
+              <h2>Decision Timer</h2>
+              <p class="helper">Tracks time to decision and hesitation. Starts on New and on first interaction if idle.</p>
+            </div>
+
+            <div class="timer-card">
+              <div class="timer-head">
+                <div>
+                  <div class="timer-value mono" id="timerClock">00:00:00</div>
+                  <div class="timer-status" id="timerStatus">Ready</div>
+                </div>
+                <div class="timer-actions">
+                  <button type="button" class="btn" id="btnTimerStart">Start</button>
+                  <button type="button" class="btn btn-warn" id="btnTimerPause">Pause</button>
+                  <button type="button" class="btn btn-danger" id="btnTimerReset">Reset</button>
+                </div>
+              </div>
+
+              <div class="timer-stats">
+                <article class="mini-stat">
+                  <span>Last Saved Duration</span>
+                  <strong id="statLastDur">—</strong>
+                </article>
+                <article class="mini-stat">
+                  <span>Saved Decisions</span>
+                  <strong id="statSaved">0</strong>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section-card">
+            <div class="section-head">
+              <p class="section-kicker">Risk Snapshot</p>
+              <h2>Execution Reference</h2>
+              <p class="helper">Lightweight trade plan card aligned to the risk calculator. This stays reference-first, not blotter-heavy.</p>
+            </div>
+
+            <div class="input-grid input-grid-2">
+              <label class="field">
+                <span>Planned Entry</span>
+                <input id="plannedEntry" class="mono" type="number" step="0.0001" placeholder="4.25" />
+              </label>
+
+              <label class="field">
+                <span>Planned Stop</span>
+                <input id="plannedStop" class="mono" type="number" step="0.0001" placeholder="3.95" />
+              </label>
+
+              <label class="field">
+                <span>Planned Target</span>
+                <input id="plannedTarget" class="mono" type="number" step="0.0001" placeholder="5.10" />
+              </label>
+
+              <label class="field">
+                <span>Max Risk</span>
+                <input id="maxRisk" class="mono" type="number" step="1" placeholder="50" />
+              </label>
+            </div>
+
+            <div class="derived-grid">
+              <article class="secondary-card">
+                <span class="secondary-label">Stop Distance</span>
+                <strong id="stopDistance" class="secondary-value">—</strong>
+              </article>
+              <article class="secondary-card">
+                <span class="secondary-label">Target Distance</span>
+                <strong id="targetDistance" class="secondary-value">—</strong>
+              </article>
+              <article class="secondary-card">
+                <span class="secondary-label">R Multiple</span>
+                <strong id="roughR" class="secondary-value">—</strong>
+              </article>
+            </div>
+          </section>
+
+          <section class="card section-card">
+            <div class="section-head">
+              <p class="section-kicker">History / Export</p>
+              <h2>Decision Archive</h2>
+              <p class="helper">Support layer only. Review archived decisions quickly, then use export for downstream analysis.</p>
+            </div>
+
+            <div class="archive-summary">
+              <article class="mini-stat">
+                <span>Taken</span>
+                <strong id="statTaken">0</strong>
+              </article>
+              <article class="mini-stat">
+                <span>Passed</span>
+                <strong id="statPassed">0</strong>
+              </article>
+              <article class="mini-stat">
+                <span>Invalidated</span>
+                <strong id="statInvalid">0</strong>
+              </article>
+            </div>
+
+            <div class="history-list" id="historyList"></div>
+          </section>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <div class="footer-pill">Trading Core System • Execution Journal</div>
+      </footer>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

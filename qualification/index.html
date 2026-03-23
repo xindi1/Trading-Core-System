@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="blue">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Trade Qualification Engine</title>
+  <meta name="theme-color" content="#020617" />
+  <meta name="description" content="Determines whether a trade meets predefined execution criteria." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar card">
+      <div class="brand-block">
+        <p class="eyebrow">Trading Core System</p>
+        <h1>Trade Qualification Engine</h1>
+        <p class="subtitle">Determines whether a trade meets predefined execution criteria.</p>
+      </div>
+
+      <div class="topbar-side">
+        <nav class="system-nav" aria-label="Trading Core System modules">
+          <a class="system-link active" href="./index.html" aria-current="page">Qualification</a>
+          <a class="system-link" href="#" aria-disabled="true">Risk</a>
+          <a class="system-link" href="#" aria-disabled="true">Journal</a>
+        </nav>
+
+        <div class="header-meta">
+          <div class="meta-pill">Max trades <strong>2</strong></div>
+          <div class="meta-pill">Max daily loss <strong>$150</strong></div>
+          <div class="meta-pill">No short selling</div>
+          <div class="meta-pill mono" id="clock">—</div>
+        </div>
+
+        <div class="theme-toggle" id="themeToggle" aria-label="Theme toggle">
+          <button type="button" data-theme="blue" class="active">Blue</button>
+          <button type="button" data-theme="light">Light</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-grid">
+      <section class="main-column">
+        <section class="card section-card">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Execution Entry</p>
+              <h2>Inputs</h2>
+            </div>
+            <p class="helper">Define the trade environment, catalyst quality, and structure to determine whether the setup qualifies.</p>
+          </div>
+
+          <nav class="regime-tabs" aria-label="Day Regime">
+            <button type="button" class="active" data-regime="GREEN">🟢 High-Catalyst</button>
+            <button type="button" data-regime="YELLOW">🟡 Normal</button>
+            <button type="button" data-regime="ORANGE">🟠 Choppy</button>
+            <button type="button" data-regime="RED">🔴 Dead / Trap</button>
+          </nav>
+
+          <div class="topline-row">
+            <div class="regime-panel">
+              <div class="mini-label">Regime posture</div>
+              <div class="regime-note" id="regimeHint">—</div>
+            </div>
+
+            <div class="early-mode-wrap">
+              <div>
+                <div class="mini-label">Early Mode</div>
+                <div class="toggle-copy">Use for 7:00–8:30am when premarket data is still developing.</div>
+              </div>
+              <div class="switch" id="earlySwitch" role="switch" aria-checked="false" tabindex="0" title="Use for 7:00–8:30am when premarket data is still developing"></div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label class="field">
+              <span>Account capital ($)</span>
+              <input id="capital" type="number" inputmode="decimal" min="0" step="1" value="1000" />
+            </label>
+
+            <label class="field">
+              <span>Ticker</span>
+              <input id="ticker" type="text" placeholder="e.g. ABCD" maxlength="10" />
+            </label>
+
+            <label class="field">
+              <span>Catalyst type</span>
+              <div class="select-wrap">
+                <select id="catalystType">
+                  <option value="">Select…</option>
+                  <option>Clinical Data</option>
+                  <option>Regulatory</option>
+                  <option>Financial</option>
+                  <option>M&amp;A</option>
+                  <option>Leadership Change</option>
+                  <option>Legal</option>
+                  <option>IP/Patent</option>
+                  <option>Operational Update</option>
+                  <option>Corporate Strategy / Business Transformation</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </label>
+
+            <label class="field">
+              <span>Catalyst freshness</span>
+              <div class="select-wrap">
+                <select id="catalystFresh">
+                  <option value="">Select…</option>
+                  <option value="FRESH">Fresh (today / overnight)</option>
+                  <option value="RECENT">Recent (1–3 days)</option>
+                  <option value="STALE">Stale (4+ days)</option>
+                  <option value="NONE">No clear catalyst</option>
+                </select>
+              </div>
+            </label>
+
+            <label class="field">
+              <span>Float (millions)</span>
+              <input id="floatM" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 8.5" />
+            </label>
+
+            <label class="field">
+              <span>Premarket % change</span>
+              <input id="pmPct" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 42.0" />
+            </label>
+          </div>
+
+          <div id="earlyBlock" class="mode-block" hidden>
+            <div class="mode-head">
+              <div>
+                <div class="mini-label">Checkpoint Mode</div>
+                <h3>Early Mode Checkpoint</h3>
+              </div>
+              <p>Use absolute share checkpoints while premarket volume is still forming.</p>
+            </div>
+
+            <div class="form-grid compact-grid">
+              <label class="field">
+                <span>Time checkpoint (Early)</span>
+                <div class="select-wrap">
+                  <select id="checkpoint">
+                    <option value="0715">7:00–7:15</option>
+                    <option value="0745">7:15–7:45</option>
+                    <option value="0830" selected>7:45–8:30</option>
+                    <option value="0915">8:30–9:15</option>
+                  </select>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Premarket volume (shares)</span>
+                <input id="absVol" type="number" inputmode="numeric" step="1" placeholder="e.g. 250000" />
+              </label>
+            </div>
+
+            <div class="helper helper-tight mode-note" id="earlyHint">—</div>
+          </div>
+
+          <div id="normalVolBlock" class="mode-block">
+            <div class="mode-head">
+              <div>
+                <div class="mini-label">Volume Context</div>
+                <h3>Standard Volume Inputs</h3>
+              </div>
+              <p>Use mature premarket context once volume multiples are more reliable.</p>
+            </div>
+
+            <div class="form-grid compact-grid">
+              <label class="field">
+                <span>Premarket volume (× avg)</span>
+                <input id="volX" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 6.0" />
+              </label>
+
+              <label class="field">
+                <span>Spread % (approx)</span>
+                <input id="spreadPct" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 2.5" />
+              </label>
+            </div>
+          </div>
+
+          <div id="spreadAlways" class="mode-block" hidden>
+            <div class="mode-head">
+              <div>
+                <div class="mini-label">Spread Context</div>
+                <h3>Early Mode Spread Context</h3>
+              </div>
+              <p>Spread still matters even when using checkpoint-based volume validation.</p>
+            </div>
+
+            <div class="form-grid compact-grid">
+              <label class="field">
+                <span>Spread % (approx)</span>
+                <input id="spreadPct2" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 2.5" />
+              </label>
+
+              <label class="field">
+                <span>(Optional) Premarket vol × avg</span>
+                <input id="volX2" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 2.0" />
+              </label>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label class="field">
+              <span>VWAP status</span>
+              <div class="select-wrap">
+                <select id="vwap">
+                  <option value="">Select…</option>
+                  <option value="ABOVE">Above VWAP / holding</option>
+                  <option value="RECLAIM">Reclaiming VWAP</option>
+                  <option value="BELOW">Below VWAP / failing</option>
+                  <option value="NA">Unknown</option>
+                </select>
+              </div>
+            </label>
+
+            <label class="field">
+              <span>Expected day range</span>
+              <div class="select-wrap">
+                <select id="rangeExp">
+                  <option value="">Select…</option>
+                  <option value="LOW">&lt; 30%</option>
+                  <option value="MED">30–50%</option>
+                  <option value="HIGH">50–100%</option>
+                  <option value="EXT">100%+</option>
+                </select>
+              </div>
+            </label>
+
+            <label class="field field-full">
+              <span>Notes (optional)</span>
+              <textarea id="notes" placeholder="Key levels, dilution risk, plan notes…"></textarea>
+            </label>
+          </div>
+
+          <div class="action-row">
+            <button id="evalBtn" type="button" class="btn btn-primary">Evaluate Trade</button>
+            <button id="saveBtn" type="button" class="btn btn-secondary">Save</button>
+            <button id="exportBtn" type="button" class="btn btn-secondary">Export CSV</button>
+            <button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
+          </div>
+
+          <div class="helper thresholds" id="thresholdsNote">—</div>
+        </section>
+      </section>
+
+      <section class="side-column">
+        <section class="card section-card decision-anchor">
+          <div class="section-head tight">
+            <div>
+              <p class="section-kicker">Decision Output</p>
+              <h2>Trade Decision</h2>
+            </div>
+            <p class="helper">Central qualification output for the current setup.</p>
+          </div>
+
+          <div class="decision-panel state-no-go" id="statusBox">
+            <p class="decision-kicker">Qualification Status</p>
+            <div class="decision-line" id="decisionLine">NO-GO</div>
+            <div class="decision-why" id="decisionWhy">Fill inputs and evaluate.</div>
+
+            <div class="decision-meta">
+              <div class="decision-chip mono" id="scoreBadge">Score: --</div>
+              <div class="decision-chip mono" id="confidenceBadge">Confidence: --</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card section-card">
+          <div class="section-head tight">
+            <div>
+              <p class="section-kicker">Output Metrics</p>
+              <h2>Key Outputs</h2>
+            </div>
+            <p class="helper">Primary qualification metrics and execution constraints.</p>
+          </div>
+
+          <div class="metrics-grid">
+            <article class="metric-card metric-card-hero">
+              <span class="metric-label">Score</span>
+              <strong class="metric-value" id="scoreMetric">—</strong>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-label">Recommended session</span>
+              <strong class="metric-value metric-value-small" id="recSession">—</strong>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-label">Position size</span>
+              <strong class="metric-value mono" id="posSize">$—</strong>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-label">Stop %</span>
+              <strong class="metric-value mono" id="stopPct">—</strong>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-label">Max $ risk</span>
+              <strong class="metric-value mono" id="maxRisk">$—</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="card section-card">
+          <div class="section-head tight">
+            <div>
+              <p class="section-kicker">Review Context</p>
+              <h2>Why This Decision</h2>
+            </div>
+            <p class="helper">Summary of the setup state, regime posture, and execution logic.</p>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-box">
+              <div class="summary-label">Decision profile</div>
+              <div class="summary-value" id="decisionProfile">—</div>
+            </div>
+            <div class="summary-box">
+              <div class="summary-label">Execution stance</div>
+              <div class="summary-value" id="executionStance">—</div>
+            </div>
+          </div>
+
+          <div class="narrative-block" id="reasonNarrative">No evaluation yet.</div>
+
+          <div class="exit-plan-block">
+            <div class="summary-label">Exit plan</div>
+            <div class="narrative-block mono" id="exitPlan">—</div>
+          </div>
+        </section>
+
+        <section class="card section-card">
+          <div class="section-head tight">
+            <div>
+              <p class="section-kicker">Fail-Fast Layer</p>
+              <h2>Fail-Fast Flags</h2>
+            </div>
+            <p class="helper">Immediate disqualifiers or elevated caution conditions.</p>
+          </div>
+
+          <div id="failFastList" class="flag-list">
+            <div class="empty-state">No evaluation yet.</div>
+          </div>
+        </section>
+
+        <section class="card section-card">
+          <div class="section-head tight">
+            <div>
+              <p class="section-kicker">Validation Layer</p>
+              <h2>Gate Checks</h2>
+            </div>
+            <p class="helper">Supporting validation checks behind the qualification result.</p>
+          </div>
+
+          <ul id="checksList" class="checks-list"></ul>
+        </section>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div class="footer-pill">Trading Core System • Qualification Engine</div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

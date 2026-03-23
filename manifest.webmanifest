@@ -1,0 +1,21 @@
+{
+  "name": "Trading Core System",
+  "short_name": "TradingCore",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "description": "Launcher for Trade Qualification Engine, Trade Risk & Target Calculator, and Trade Execution Journal.",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

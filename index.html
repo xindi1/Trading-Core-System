@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#020617" />
+  <meta name="description" content="Trading Core System launcher for Qualification, Risk, and Journal tools." />
+  <title>Trading Core System</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="hero card">
+      <div class="hero-copy">
+        <div class="eyebrow">Trading Core System</div>
+        <h1>Launcher</h1>
+        <p class="subtitle">Open the three core trading tools from one installable home screen.</p>
+      </div>
+      <div class="hero-side">
+        <div class="status-card">
+          <div class="status-label">System</div>
+          <div class="status-value">Ready</div>
+          <div class="status-meta">Qualification • Risk • Journal</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card stack span-2">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Core Modules</div>
+            <h2>Choose a tool</h2>
+          </div>
+          <button id="installBtn" class="btn btn-primary" hidden>Install</button>
+        </div>
+
+        <div class="tool-grid">
+          <a class="tool-card" href="./qualification/index.html" data-tool="qualification">
+            <div class="tool-top">
+              <span class="tool-tag">1</span>
+              <span class="open-arrow">↗</span>
+            </div>
+            <h3>Trade Qualification Engine</h3>
+            <p>Determines whether a trade meets predefined execution criteria.</p>
+            <div class="tool-meta">Setup quality • regime • qualification score</div>
+          </a>
+
+          <a class="tool-card" href="./risk/index.html" data-tool="risk">
+            <div class="tool-top">
+              <span class="tool-tag">2</span>
+              <span class="open-arrow">↗</span>
+            </div>
+            <h3>Trade Risk &amp; Target Calculator</h3>
+            <p>Determines position size, risk exposure, and reward potential for a trade.</p>
+            <div class="tool-meta">Position sizing • stop distance • reward profile</div>
+          </a>
+
+          <a class="tool-card" href="./journal/index.html" data-tool="journal">
+            <div class="tool-top">
+              <span class="tool-tag">3</span>
+              <span class="open-arrow">↗</span>
+            </div>
+            <h3>Trade Execution Journal</h3>
+            <p>Captures the execution decision, outcome, and review context for qualified trade setups.</p>
+            <div class="tool-meta">Decision quality • outcome • review snapshot</div>
+          </a>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <div class="section-label">Workflow</div>
+        <h2>Execution path</h2>
+        <ol class="flow-list">
+          <li><strong>Qualify</strong><span>Does the setup deserve attention?</span></li>
+          <li><strong>Plan risk</strong><span>What is the correct exposure?</span></li>
+          <li><strong>Review execution</strong><span>Was the decision correct?</span></li>
+        </ol>
+      </section>
+
+      <section class="card stack">
+        <div class="section-label">Last Opened</div>
+        <h2 id="lastOpenedTitle">None yet</h2>
+        <p id="lastOpenedMeta" class="muted">Open a module from this launcher and it will appear here.</p>
+        <button id="resumeBtn" class="btn btn-secondary" disabled>Resume last tool</button>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Trading Core System • Launcher</span>
+      <span>Installable home screen</span>
+    </footer>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
